@@ -12,7 +12,25 @@
 
 #include "minitalk.h"
 
-int	g_bits_chr = 0;
+void	create_chr(int signo, siginfo_t *siginfo, void *context)
+{
+	static unsigned char	c;
+	static unsigned int		bits_chr;
+
+	(void)context;
+	bits_chr++;
+	if(signo == SIGUSR2)
+			c |= 1;
+	if (bits_chr == 8)
+	{
+		write (1, &c, 1);
+		bits_chr = 0;
+		c = 0;
+	}
+	c <<= 1;
+	if (kill(siginfo->si_pid, SIGUSR1))
+		exit(EXIT_FAILURE);
+}
 
 int	main(void)
 {
@@ -23,25 +41,6 @@ int	main(void)
 	ft_printf("Server's PID is: %i\n\n", getpid());
 	sigaction(SIGUSR1, &create, NULL);
 	sigaction(SIGUSR2, &create, NULL);
-	while (42)
+	while (TRUE)
 		pause();
-
-}
-
-void	create_chr(int signo, siginfo_t *siginfo, void *context)
-{
-	static unsigned char	c = 0;
-
-	(void)context;
-	g_bits_chr++;
-	if (signo == SIGUSR2)
-			c |= 1;
-	if (g_bits_chr == 8)
-	{
-		write (1, &c, 1);
-		g_bits_chr = 8;
-		c = 0;
-	}
-	c <<= 1;
-	kill(siginfo->si_pid, SIGUSR1);
 }

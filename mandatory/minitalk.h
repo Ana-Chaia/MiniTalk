@@ -24,4 +24,7 @@ void	signal_receipt(int signo);
 void	send_bit(int server_pid, char c);
 int		ft_verify(int argc, char *pid);
 
+#define TRUE 1
+#define FALSE 0
+
 #endif

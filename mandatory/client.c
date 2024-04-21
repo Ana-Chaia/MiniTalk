@@ -12,7 +12,54 @@
 
 #include "minitalk.h"
 
-int	g_handshake = 0;
+volatile int	g_handshake = FALSE;
+
+int	ft_verify(int argc, char *pid)
+{
+	int	i;
+
+	if (argc != 3)
+		return (ft_printf("ERROR: wrong number of arguments.\n"));
+	i = 0;
+	while (pid[i] != '\0')
+	{
+		if (!ft_isdigit(pid[i]))
+			return (ft_printf("ERROR: enter a valid SERVER PID number.\n"));
+		i++;
+	}
+	return (0);
+}
+
+void	signal_receipt(int signo)
+{
+	if (signo == SIGUSR1)
+		g_handshake = TRUE;
+}
+
+void	send_bit(int server_pid, char c)
+{
+	int	bit;
+
+	bit = 7;
+	while (bit >= 0)
+	{
+		g_handshake = FALSE;
+		if (((c >> bit) & 1) == 0)
+		{
+			if(kill(server_pid, SIGUSR1))
+				exit(EXIT_FAILURE);
+		}
+		else if (((c >> bit) & 1) == 1)
+		{
+			if(kill(server_pid, SIGUSR2))
+				exit(EXIT_FAILURE);
+		}
+		bit--;
+		while (!g_handshake)
+			;
+
+	}
+}
 
 int	main(int argc, char **argv)
 {
@@ -28,45 +75,5 @@ int	main(int argc, char **argv)
 	sighandshake.sa_flags = 0;
 	sigaction(SIGUSR1, &sighandshake, NULL);
 	while (*str != '\0')
-		send_bit(server_pid, *(str)++);
-}
-
-void	signal_receipt(int signo)
-{
-	if (signo == SIGUSR1)
-		g_handshake = 1;
-}
-
-void	send_bit(int server_pid, char c)
-{
-	int	bit;
-
-	bit = 7;
-	while (bit >= 0)
-	{
-		g_handshake = 0;
-		if (((c >> bit) & 1) == 0)
-			kill(server_pid, SIGUSR1);
-		else if (((c >> bit) & 1) == 1)
-			kill(server_pid, SIGUSR2);
-		bit--;
-		while (!g_handshake)
-			;
-	}
-}
-
-int	ft_verify(int argc, char *pid)
-{
-	int	i;
-
-	i = 0;
-	if (argc != 3)
-		return (ft_printf("Wrong number of arguments.\n"));
-	while (pid[i] != '\0')
-	{
-		if (!ft_isdigit(pid[i]))
-			return (ft_printf("PID Error.\n"));
-		i++;
-	}
-	return (0);
+		send_bit(server_pid, *str++);
 }
