@@ -1,1 +1,8 @@
-Repositorio projeto minitalk
+Minitalk Project
+Overview
+Minitalk is a small data exchange program using UNIX signals. This project was created as part of the 42 school curriculum. The objective is to code a server and a client that can communicate using UNIX signals to send and receive messages.
+
+Features
+Communication via Signals: Uses SIGUSR1 and SIGUSR2 to transmit binary data.
+Server: Handles incoming connections and messages, displaying them as they are received.
+Client: Sends a string to the server which then displays it.
