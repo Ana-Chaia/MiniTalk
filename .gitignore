@@ -53,6 +53,7 @@ Mkfile.old
 dkms.conf
 
 ### VisualStudioCode ###
+*.nfs
 .vscode/*
 !.vscode/settings.json
 !.vscode/tasks.json
