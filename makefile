@@ -6,35 +6,35 @@
 #    By: anacaro5 <anacaro5@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/04/04 10:20:00 by anacaro5          #+#    #+#              #
-#    Updated: 2024/04/04 10:28:43 by anacaro5         ###   ########.fr        #
+#    Updated: 2024/04/22 09:42:37 by anacaro5         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME_MC 	= client
 NAME_MS 	= server
-# NAME_BC 	= client_bonus
-# NAME_BS		= server_bonus
+NAME_BC 	= client_bonus
+NAME_BS		= server_bonus
 
 CC			= cc
 CFLAGS		= -Werror -Wall -Wextra -g3
 LIBFT		= ./libplus/libft.a
 
 M_INC		= -I mandatory/minitalk.h
-# B_INC		= -I bonus/minitalk_bonus.h
+B_INC		= -I bonus/minitalk_bonus.h
 
 PATH_M		=	mandatory/
 CLIENT_M	=	$(addprefix $(PATH_M), client.c)
 SERVER_M	=	$(addprefix $(PATH_M), server.c)
 
-# PATH_B		=	bonus/
-# CLIENT_B	=	$(addprefix $(PATH_B), client_bonus.c)
-# SERVER_B	=	$(addprefix $(PATH_B), server_bonus.c)
+PATH_B		=	bonus/
+CLIENT_B	=	$(addprefix $(PATH_B), client_bonus.c)
+SERVER_B	=	$(addprefix $(PATH_B), server_bonus.c)
 
 CLIENT_M_O	=	$(CLIENT_M:%.c=%.o)
 SERVER_M_O	=	$(SERVER_M:%.c=%.o)
 
-# CLIENT_B_O	=	$(CLIENT_B:%.c=%.o)
-# SERVER_B_O	= 	$(SERVER_B:%.c=%.o)
+CLIENT_B_O	=	$(CLIENT_B:%.c=%.o)
+SERVER_B_O	= 	$(SERVER_B:%.c=%.o)
 
 BLUE 		= \033[1;36m
 WHITE 		= \033[0;39m
@@ -52,7 +52,7 @@ $(NAME_MC): $(CLIENT_M_O)
 $(NAME_MS): $(SERVER_M_O)
 	$(CC) $(CFLAGS) $< -I $(PATH_M) $(LIBFT) -o $@
 
-# bonus: libft $(NAME_BC) $(NAME_BS)
+bonus: libft $(NAME_BC) $(NAME_BS)
 
 $(NAME_BC): $(CLIENT_B_O)
 	$(CC) $(CFLAGS) $< -I $(PATH_B) $(LIBFT) -o $@
